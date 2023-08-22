@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from './services/login.service';
 import { Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // Try to restore an old Session
     this.ls.restore_session()
+
+    // Enable Flowbite JS
+    initFlowbite();
 
     if(!this.ls.logged_in()) {
       this.router.navigate(["/login"])
