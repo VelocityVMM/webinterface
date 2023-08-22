@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 
@@ -7,9 +7,15 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+
+  public darkMode = false;
 
   constructor(private ls: LoginService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.router.navigate(["/dashboard/overview"])
+  }
 
   logout() { 
     this.ls.logout().subscribe({
@@ -22,4 +28,13 @@ export class DashboardComponent {
     })
   }
 
+  toggleTheme() {
+    this.darkMode = !this.darkMode
+
+    if(this.darkMode) {
+      document.documentElement.classList.remove('dark')
+    } else {
+      document.documentElement.classList.add('dark')
+    }
+  }
 }
