@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
+import { VelocityService } from '../services/velocity.service';
+import { LogService } from '../services/log.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,12 +11,19 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-  public darkMode = false;
+  public dark_mode = false;
+  public available_options: string[] = [ ];
 
-  constructor(private ls: LoginService, private router: Router) { }
+  constructor(private vlog: LogService, private ls: LoginService, 
+              private vs: VelocityService, private router: Router) { }
 
   ngOnInit(): void {
     this.router.navigate(["/dashboard/overview"])
+    this.ls.user_set.subscribe({
+      next: () => {
+        this.permission_check()
+      }
+    })
   }
 
   logout() { 
@@ -28,13 +37,33 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  toggleTheme() {
-    this.darkMode = !this.darkMode
+  toggle_theme() {
+    this.dark_mode = !this.dark_mode
 
-    if(this.darkMode) {
+    if(this.dark_mode) {
       document.documentElement.classList.remove('dark')
     } else {
       document.documentElement.classList.add('dark')
     }
+  }
+
+  permission_check() {
+    this.vlog.VInfo("Checking permissions..", "PERM")
+
+    // Overview is always enabled (for now)
+    this.available_options.push("overview");
+
+    if(this.ls.get_user()?.has_permissions_global(["velocity.user.create",
+                                                    "velocity.user.remove",
+                                                    "velocity.user.assign",
+                                                    "velocity.user.revoke"
+                                                  ])) {
+      this.available_options.push("users");
+    }
+
+  }
+
+  is_enabled(name: string) {
+    return this.available_options.includes(name)
   }
 }
