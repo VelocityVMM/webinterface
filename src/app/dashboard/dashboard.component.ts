@@ -18,7 +18,9 @@ export class DashboardComponent implements OnInit {
               private vs: VelocityService, private router: Router) { }
 
   ngOnInit(): void {
-    this.router.navigate(["/dashboard/overview"])
+    if(window.location.pathname == "/dashboard/" || window.location.pathname == "/dashboard") {
+      this.router.navigate(["/dashboard/overview"])
+    }
     this.ls.user_set.subscribe({
       next: () => {
         this.permission_check()

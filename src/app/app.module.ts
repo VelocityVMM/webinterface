@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from  '@angular/common/http';
 import { OverviewComponent } from './overview/overview.component';
 import { UsersComponent } from './users/users.component';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { UsersComponent } from './users/users.component';
     LoginComponent,
     DashboardComponent,
     OverviewComponent,
-    UsersComponent
+    UsersComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,

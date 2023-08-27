@@ -21,6 +21,11 @@ export class AppComponent implements OnInit {
 
     if(!this.ls.logged_in()) {
       this.router.navigate(["/login"])
+    } else {
+      // No target -> move to overview
+      if(window.location.pathname == "/") {
+        this.router.navigate(["/dashboard/overview"])
+      }
     }
   }
 
