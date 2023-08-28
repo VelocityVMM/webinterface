@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { VelocityService } from '../services/velocity.service';
+import { User, VelocityService } from '../services/velocity.service';
 
 @Component({
   selector: 'app-users',
@@ -10,8 +10,22 @@ export class UsersComponent implements OnInit {
 
   constructor(private vs: VelocityService) { }
 
-  ngOnInit(): void {
+  users: User[ ] = [ ]
 
+  ngOnInit(): void {
+    this.vs.get_userlist().subscribe({
+      next: (v) => {
+        this.users = v
+      }
+    })
+
+    /*
+    this.vs.get_userlist()?.subscribe({
+      next: (v) => {
+        console.log(v)
+      }
+    })
+  */
   }
 
 }
