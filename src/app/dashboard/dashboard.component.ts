@@ -58,7 +58,8 @@ export class DashboardComponent implements OnInit {
     if(this.ls.get_user()?.has_permissions_global(["velocity.user.create",
                                                     "velocity.user.remove",
                                                     "velocity.user.assign",
-                                                    "velocity.user.revoke"
+                                                    "velocity.user.revoke",
+                                                    "velocity.user.list"
                                                   ])) {
       this.available_options.push("users");
     }

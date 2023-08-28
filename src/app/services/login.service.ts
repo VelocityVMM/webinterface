@@ -13,6 +13,8 @@ export class LoginService {
 
   // The current in-use AuthKey
   private authkey?: AuthKey;
+  private refresh_in_progress: boolean = false;
+  @Output() refresh_complete: EventEmitter<any> = new EventEmitter();
 
   // The current User
   private user?: User;
@@ -40,7 +42,7 @@ export class LoginService {
 
           this.refreshInterval = setInterval(() => {
             this.refresh();
-          }, 10000)
+          }, 6000)
 
           // Set the current User
           this.set_user();
@@ -78,6 +80,7 @@ export class LoginService {
   // Requests a new Authkey
   //
   refresh() {
+    this.refresh_in_progress = true;
     this.vlog.VInfo("Refreshing Authkey..", "LS")
 
     this.http.patch<AuthKey>(VELOCITY_URL + "u/auth", {
@@ -88,6 +91,8 @@ export class LoginService {
 
         localStorage.setItem("AuthKey", v.authkey);
         localStorage.setItem("Expires", v.expires.toString())
+        this.refresh_in_progress = false;
+        this.refresh_complete.emit()
       },
       error: (e) => {
         this.vlog.VErr("Could not refresh Authkey. Already invalid. Aborting.", "LS")
@@ -96,6 +101,8 @@ export class LoginService {
         // clear refresh Interval
         clearInterval(this.refreshInterval)
         this.router.navigate(["/login"])
+        this.refresh_in_progress = false;
+        this.refresh_complete.emit()
       },
     })
   }
@@ -139,13 +146,38 @@ export class LoginService {
 
     this.set_user()
     this.refresh();
+
+    this.refreshInterval = setInterval(() => {
+      this.refresh();
+    }, 6000)
   }
 
   //
   // Get current authkey
   //
-  get_authkey(): string | undefined {
-    return this.authkey?.authkey;
+  get_authkey(): Observable<string> {
+    const authkey_observable = new Observable<string>((observer) => {
+
+      // Authkey is being refreshed, await refresh.
+      if(this.refresh_in_progress) {
+        this.refresh_complete.subscribe({
+          next: () => {
+            observer.next(this.authkey?.authkey)
+            observer.complete()
+          },
+          error: (e: any) => {
+            observer.error(e)
+            observer.complete()
+          }
+        })
+      
+      // Authkey is not being refreshed.
+      } else {
+        observer.next(this.authkey?.authkey)
+        observer.complete()
+      }
+    })
+    return authkey_observable
   }
 
   //
