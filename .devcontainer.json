@@ -1,0 +1,8 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "forwardPorts": [4200],
+    "remoteUser": "user",
+    "updateRemoteUserUID": true
+}
