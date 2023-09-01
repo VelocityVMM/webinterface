@@ -10,6 +10,7 @@ import { HttpClientModule } from  '@angular/common/http';
 import { OverviewComponent } from './overview/overview.component';
 import { UsersComponent } from './users/users.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { CreateuserComponent } from './createuser/createuser.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { NotfoundComponent } from './notfound/notfound.component';
     DashboardComponent,
     OverviewComponent,
     UsersComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    CreateuserComponent
   ],
   imports: [
     BrowserModule,

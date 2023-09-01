@@ -18,14 +18,5 @@ export class UsersComponent implements OnInit {
         this.users = v
       }
     })
-
-    /*
-    this.vs.get_userlist()?.subscribe({
-      next: (v) => {
-        console.log(v)
-      }
-    })
-  */
   }
-
 }

@@ -35,6 +35,36 @@ export class VelocityService {
     })
     return userlist_observable;
   }
+
+  create_user(username: string, password: string): Observable<any> {
+    const createuser_observable = new Observable<any>((observer) => {
+
+      // async fetch and await Authkey
+      this.ls.get_authkey().subscribe({
+        next: (authkey) => {
+
+          // Use the acquired Authkey to send the actual request
+          this.http.put<CreateUser>(VELOCITY_URL + "u/user/", 
+            {
+              name: username,
+              password: password, 
+              authkey: authkey
+            }
+          ).subscribe({
+            next: (v) => {
+              observer.next(v)
+              observer.complete()
+            }, error: (e) => {
+              observer.error(e)
+              observer.complete()
+            }
+          })
+        }
+      })
+    })
+    return createuser_observable
+  }
+
 }
 
 export class Users {
@@ -48,6 +78,16 @@ export class User {
   public uid: number;
   public name: string;
   
+  constructor(uid: number, name: string) {
+    this.uid = uid;
+    this.name = name;
+  }
+}
+
+export class CreateUser {
+  public uid: number;
+  public name: string;
+
   constructor(uid: number, name: string) {
     this.uid = uid;
     this.name = name;
