@@ -18,6 +18,17 @@ export class DashboardComponent implements OnInit {
               private vs: VelocityService, private router: Router) { }
 
   ngOnInit(): void {
+    // Check if Darkmode is set.
+    if(localStorage.getItem("Theme") == "Dark") {
+      this.vlog.VInfo("Restored Theme settings, Darkmode enabled.", "THEME")
+      document.documentElement.classList.add('dark')
+      this.dark_mode = true;
+    } else {
+      this.vlog.VInfo("Restored Theme settings, Darkmode disabled.", "THEME")
+      document.documentElement.classList.remove('dark')
+      this.dark_mode = false;
+    }
+
     if(window.location.pathname == "/dashboard/" || window.location.pathname == "/dashboard") {
       this.router.navigate(["/dashboard/overview"])
     }
@@ -40,13 +51,15 @@ export class DashboardComponent implements OnInit {
   }
 
   toggle_theme() {
-    this.dark_mode = !this.dark_mode
-
     if(this.dark_mode) {
       document.documentElement.classList.remove('dark')
+      localStorage.setItem("Theme", "Light")
     } else {
       document.documentElement.classList.add('dark')
+      localStorage.setItem("Theme", "Dark")
     }
+
+    this.dark_mode = !this.dark_mode
   }
 
   permission_check() {

@@ -185,19 +185,24 @@ export class LoginService {
   //
   set_user() {
     this.vlog.VInfo("Acquiring User information..", "LS")
-    this.http.post<User>(VELOCITY_URL + "u/user", { authkey: this.authkey?.authkey }).subscribe({
-      next: (v) => {
-        const memberships: Membership[] = [ ];
-        for(let mb of v.memberships) {
-          memberships.push(new Membership(mb.gid, mb.name, mb.parent_gid, mb.permissions))
-        }
-        this.user = new User(v.uid, v.name, memberships);
 
-        this.vlog.VInfo("User information set.", "LS")
-        this.user_set.emit();
-      },
-      error: (e) => {
-        console.log(e)
+    this.get_authkey().subscribe({
+      next: (authkey) => {
+        this.http.post<User>(VELOCITY_URL + "u/user", { authkey: authkey }).subscribe({
+          next: (v) => {
+            const memberships: Membership[] = [ ];
+            for(let mb of v.memberships) {
+              memberships.push(new Membership(mb.gid, mb.name, mb.parent_gid, mb.permissions))
+            }
+            this.user = new User(v.uid, v.name, memberships);
+    
+            this.vlog.VInfo("User information set.", "LS")
+            this.user_set.emit();
+          },
+          error: (e) => {
+            console.log(e)
+          }
+        })
       }
     })
   }
