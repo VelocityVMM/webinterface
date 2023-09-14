@@ -144,8 +144,8 @@ export class LoginService {
     this.authkey = new AuthKey(authkey, +expires)
     this.vlog.VInfo("Refreshing Authkey..", "LS")
 
-    this.set_user()
     this.refresh();
+    this.set_user()
 
     this.refreshInterval = setInterval(() => {
       this.refresh();

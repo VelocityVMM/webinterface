@@ -10,7 +10,7 @@ import { HttpClientModule } from  '@angular/common/http';
 import { OverviewComponent } from './overview/overview.component';
 import { UsersComponent } from './users/users.component';
 import { NotfoundComponent } from './notfound/notfound.component';
-import { CreateuserComponent } from './createuser/createuser.component';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { CreateuserComponent } from './createuser/createuser.component';
     OverviewComponent,
     UsersComponent,
     NotfoundComponent,
-    CreateuserComponent
+    NotificationComponent
   ],
   imports: [
     BrowserModule,

@@ -1,23 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, OnInit, SecurityContext, ViewChild, ViewContainerRef } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 import { VelocityService } from '../services/velocity.service';
 import { LogService } from '../services/log.service';
+import { Flowbite } from '../flowbitefix/flowbitefix';
+import { NotificationService } from '../services/notification.service';
+import { NotificationComponent, NotificationType } from '../notification/notification.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
+@Flowbite()
 export class DashboardComponent implements OnInit {
 
   public dark_mode = false;
   public available_options: string[] = [ ];
 
-  constructor(private vlog: LogService, private ls: LoginService, 
-              private vs: VelocityService, private router: Router) { }
+  // Reference to the notification ng-template
+  @ViewChild('notificationRef', { read: ViewContainerRef, static: true }) vcr!: ViewContainerRef;
 
+  constructor(private vlog: LogService, private ls: LoginService, 
+              private router: Router, private nf: NotificationService) { }
+  
   ngOnInit(): void {
+    console.log(this.vcr)
+    this.nf.set_notification_template_ref(this.vcr)
+
     // Check if Darkmode is set.
     if(localStorage.getItem("Theme") == "Dark") {
       this.vlog.VInfo("Restored Theme settings, Darkmode enabled.", "THEME")
@@ -76,7 +86,6 @@ export class DashboardComponent implements OnInit {
                                                   ])) {
       this.available_options.push("users");
     }
-
   }
 
   is_enabled(name: string) {

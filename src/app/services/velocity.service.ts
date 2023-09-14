@@ -65,6 +65,34 @@ export class VelocityService {
     return createuser_observable
   }
 
+  delete_user(uid: number): Observable<any> {
+    return new Observable<any>((observer) => {
+
+      // async fetch and await Authkey
+      this.ls.get_authkey().subscribe({
+        next: (authkey) => {
+
+          // Use the acquired Authkey to send the actual request
+          this.http.request<CreateUser>('delete', VELOCITY_URL + "u/user/", 
+            { body: 
+              {
+                authkey: authkey,
+                uid: uid
+              }
+            }
+          ).subscribe({
+            next: (v) => {
+              observer.next(v)
+              observer.complete()
+            }, error: (e) => {
+              observer.error(e)
+              observer.complete()
+            }
+          })
+        }
+      })
+    })
+  }
 }
 
 export class Users {
