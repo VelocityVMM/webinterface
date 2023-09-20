@@ -11,6 +11,10 @@ import { OverviewComponent } from './overview/overview.component';
 import { UsersComponent } from './users/users.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { NotificationComponent } from './notification/notification.component';
+import { GroupsComponent } from './groups/groups.component';
+import { TreeNodeComponent } from './tree-node/tree-node.component';
+import { GroupassignComponent } from './groupassign/groupassign.component';
+import { PermissionlistComponent } from './permissionlist/permissionlist.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { NotificationComponent } from './notification/notification.component';
     OverviewComponent,
     UsersComponent,
     NotfoundComponent,
-    NotificationComponent
+    NotificationComponent,
+    GroupsComponent,
+    TreeNodeComponent,
+    GroupassignComponent,
+    PermissionlistComponent
   ],
   imports: [
     BrowserModule,

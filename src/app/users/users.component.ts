@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { User, VelocityService } from '../services/velocity.service';
+import { VelocityService } from '../services/velocity.service';
 import { Flowbite } from '../flowbitefix/flowbitefix';
 import { NotificationService } from '../services/notification.service';
 import { NotificationType } from '../notification/notification.component';
 import { NgForm } from '@angular/forms';
+import { User } from '../classes/user';
 
 @Component({
   selector: 'app-users',

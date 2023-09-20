@@ -1,6 +1,6 @@
 <div>
     <h4 class="inline-block mb-4 text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r to-fuchsia-600 from-orange-400">Users</h4>
-    <button data-modal-target="user_modal" data-modal-toggle="user_modal" type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 float-right">Add a new User</button>
+    <button data-modal-target="user_modal" data-modal-toggle="user_modal" type="button" class="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 float-right">Add a new User</button>
 </div>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg my-4">
@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of users" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+            <tr *ngFor="let user of users" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <td class="px-6 py-4">
                     {{user.uid}}
                 </td>
@@ -29,7 +29,8 @@
                 <td class="px-6 py-4">
                     <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
                     <button (click)="delete_user(user.uid)"class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>&nbsp;
-                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Groups</a>
+                    <button [attr.data-modal-target]="'groupassign-modal-' + user.uid" [attr.data-modal-toggle]="'groupassign-modal-' + user.uid" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Groups</button>
+                    <app-groupassign [user]="user"></app-groupassign>
                 </td>
             </tr>
         </tbody>
@@ -42,7 +43,7 @@
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
 
-            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+            <div class="flex items-start justify-between p-4 rounded-t dark:border-gray-600 bg-gray-100 dark:bg-gray-700">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                     Create a new User
                 </h3>
@@ -53,31 +54,31 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-                <!-- Modal body: User creation Form -->
-                <div class="dark:bg-gray-800">
+            <!-- Modal body: User creation Form -->
+            <div class="dark:bg-gray-800">
 
-                    <!-- Form -->
-                    <form #f="ngForm" novalidate>
-                        <div class="pt-6 px-3 space-y-6">
-                            <div class="mb-6">
-                                <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                                <input name="username" type="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" ngModel required>
-                            </div>
-                            <div class="mb-6">
-                                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                <input name="password" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" ngModel required>
-                            </div>
+                <!-- Form -->
+                <form #f="ngForm" novalidate>
+                    <div class="pt-6 px-3 space-y-6">
+                        <div class="mb-6">
+                            <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                            <input name="username" type="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" ngModel required>
                         </div>
+                        <div class="mb-6">
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                            <input name="password" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" ngModel required>
+                        </div>
+                    </div>
 
-                        <!-- Create User button -->
-                        <div class="p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <div class="grid place-items-end">
-                                <button *ngIf="f.valid" data-modal-hide="user_modal" (click)="create_user(f)" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create User</button>
-                                <button *ngIf="!f.valid" type="button" class="text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>Create User</button>
-                            </div>
+                    <!-- Create User button -->
+                    <div class="p-6 space-x-2 rounded-b dark:border-gray-600">
+                        <div class="grid place-items-end">
+                            <button *ngIf="f.valid" data-modal-hide="user_modal" (click)="create_user(f)" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create User</button>
+                            <button *ngIf="!f.valid" type="button" class="text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>Create User</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
+        </div>
     </div>
 </div>

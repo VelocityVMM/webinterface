@@ -6,13 +6,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { OverviewComponent } from './overview/overview.component';
 import { UsersComponent } from './users/users.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { GroupsComponent } from './groups/groups.component';
 
 const routes: Routes = [
   { path: "", component: AppComponent, pathMatch: "full"},
   { path: "login", component: LoginComponent },
   { path: "dashboard", component: DashboardComponent, children: [
     { path: "overview", component: OverviewComponent },
-    { path: "users", component: UsersComponent }
+    { path: "users", component: UsersComponent },
+    { path: "groups", component: GroupsComponent }
   ] },
   {path: '**', component: NotfoundComponent },
 ];

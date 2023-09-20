@@ -1,11 +1,9 @@
-import { AfterViewInit, Component, ComponentRef, OnInit, SecurityContext, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
-import { VelocityService } from '../services/velocity.service';
 import { LogService } from '../services/log.service';
 import { Flowbite } from '../flowbitefix/flowbitefix';
 import { NotificationService } from '../services/notification.service';
-import { NotificationComponent, NotificationType } from '../notification/notification.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +23,6 @@ export class DashboardComponent implements OnInit {
               private router: Router, private nf: NotificationService) { }
   
   ngOnInit(): void {
-    console.log(this.vcr)
     this.nf.set_notification_template_ref(this.vcr)
 
     // Check if Darkmode is set.
