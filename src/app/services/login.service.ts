@@ -3,6 +3,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LogService } from './log.service';
+import { Membership, UserInfo } from '../classes/user';
 
 const VELOCITY_URL = "http://localhost:8090/";
 
@@ -17,7 +18,7 @@ export class LoginService {
   @Output() refresh_complete: EventEmitter<any> = new EventEmitter();
 
   // The current User
-  private user?: User;
+  private user?: UserInfo;
   @Output() user_set: EventEmitter<any> = new EventEmitter();
 
   // AuthKey refresh Interval
@@ -42,7 +43,7 @@ export class LoginService {
 
           this.refreshInterval = setInterval(() => {
             this.refresh();
-          }, 6000)
+          }, 30000)
 
           // Set the current User
           this.set_user();
@@ -184,23 +185,23 @@ export class LoginService {
   // Set the current User
   //
   set_user() {
-    this.vlog.VInfo("Acquiring User information..", "LS")
+    this.vlog.VInfo("Acquiring currently logged-in User information..", "LS")
 
     this.get_authkey().subscribe({
       next: (authkey) => {
-        this.http.post<User>(VELOCITY_URL + "u/user", { authkey: authkey }).subscribe({
+        this.http.post<UserInfo>(VELOCITY_URL + "u/user", { authkey: authkey }).subscribe({
           next: (v) => {
             const memberships: Membership[] = [ ];
             for(let mb of v.memberships) {
               memberships.push(new Membership(mb.gid, mb.name, mb.parent_gid, mb.permissions))
             }
-            this.user = new User(v.uid, v.name, memberships);
+            this.user = new UserInfo(v.uid, v.name, memberships);
     
             this.vlog.VInfo("User information set.", "LS")
             this.user_set.emit();
           },
           error: (e) => {
-            console.log(e)
+            this.vlog.VErr("Could not acquire user information.")
           }
         })
       }
