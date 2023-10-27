@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from './services/login.service';
 import { Router } from '@angular/router';
 import { initFlowbite } from 'flowbite';
+import { VelocityService } from './services/velocity.service';
 
 @Component({
   selector: 'app-root',

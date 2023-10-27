@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LogService } from './log.service';
 import { Membership, UserInfo } from '../classes/user';
-
-const VELOCITY_URL = "http://localhost:8090/";
+import { VELOCITY_URL } from './velocity.service';
 
 @Injectable({
   providedIn: 'root'

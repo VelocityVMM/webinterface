@@ -1,19 +1,31 @@
-<div class="border dark:border-gray-700 dark:bg-gray-800 bg-white rounded-xl p-2 shadow-md">
-
+<div class="border dark:border-gray-700 dark:bg-gray-800 bg-white rounded-lg shadow-md p-2">
     <!-- Button (Add subroup)-->
-    <button [attr.data-modal-target]="'group-modal-' + this.node?.gid" [attr.data-modal-toggle]="'group-modal-' + this.node?.gid" type="button" class="dark:text-white text-gray-900 float-right mt-2" data-tooltip-target="tooltip-addgroup">
+    <button [attr.data-modal-target]="'group-modal-' + this.node?.gid" [attr.data-modal-toggle]="'group-modal-' + this.node?.gid" type="button" class="dark:text-white text-gray-700 float-right mt-2" data-tooltip-target="tooltip-addgroup">
         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
         </svg>
     </button>
 
     <!-- Button (Delete group) -->
-    <button (click)="delete_node()" type="button" class="dark:text-white text-gray-900 float-right mt-2 mr-2" data-tooltip-target="tooltip-delgroup">
-        <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+    <button (click)="delete_node()" type="button" class="pl-1 dark:text-white text-gray-700 float-right mt-2 mr-2" data-tooltip-target="tooltip-delgroup">
+        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
         </svg>
     </button>
-    
+
+    <!-- Button (Assign Mediapool to Group) -->
+    <div *ngIf="media_pools?.length != 0" class="border-r pr-3 pl-1 space-x-1 float-right mr-2">
+        <button *ngFor="let pool of media_pools" [attr.data-modal-toggle]="'mediapool-modal-' + this.node?.gid + '-' + pool?.mpid" type="button" class="dark:text-white text-gray-700 mt-1">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                <path stroke-width="2" d="M4.5 11a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 10.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                <path stroke-width="2" d="M16 11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9.51c0-.418.105-.83.305-1.197l2.472-4.531A1.5 1.5 0 0 1 4.094 3h7.812a1.5 1.5 0 0 1 1.317.782l2.472 4.53c.2.368.305.78.305 1.198V11zM3.655 4.26 1.592 8.043C1.724 8.014 1.86 8 2 8h12c.14 0 .276.014.408.042L12.345 4.26a.5.5 0 0 0-.439-.26H4.094a.5.5 0 0 0-.44.26zM1 10v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <app-poolpermissions *ngFor="let pool of media_pools" [group]="this.node" [pool]="pool"></app-poolpermissions>
+
     <!-- Tooltip for add subgroup Button -->
     <div id="tooltip-addgroup" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
         Add a new Subgroup
@@ -26,13 +38,22 @@
         <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
 
+    <!-- Tooltip for Media Button -->
+    <div id="tooltip-mediagroup" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+        Permissions on Mediapools
+        <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
+
     <!-- Tooltip for each group -->
     <div [attr.id]="'tooltip-group-' + this.node?.gid" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
         {{this.node?.name}}, GID: {{this.node?.gid}}
         <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
 
-    <h5 class="mb-2 text-xl font-bold tracking-tight"><span [attr.data-tooltip-target]="'tooltip-group-' + this.node?.gid" class="text-transparent bg-clip-text bg-gradient-to-r to-fuchsia-600 from-orange-400">{{node?.name}}</span></h5>
+    <!-- Group name -->
+    <h5 class="mb-2 text-xl font-bold tracking-tight "><span [attr.data-tooltip-target]="'tooltip-group-' + this.node?.gid" class="text-transparent bg-clip-text bg-gradient-to-r to-fuchsia-600 from-orange-400">{{node?.name}}</span></h5>    
+
+    <!-- Subgroup -->
     <p class="mb-2 text-gray-500 dark:text-gray-400" *ngIf="node?.children?.length == 0">This group has no subgroups.</p>
     <div class="p-2" *ngIf="node?.children?.length != 0" id="accordion-collapse" data-accordion="collapse">
         <h2 id="accordion-collapse-heading-{{node?.gid}}">
@@ -53,7 +74,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Create group modal -->
 <div [attr.id]="'group-modal-' + this.node?.gid" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">

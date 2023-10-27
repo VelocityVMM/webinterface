@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Group } from '../classes/group';
 import { VelocityService } from '../services/velocity.service';
 import { Permission, User } from '../classes/user';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-permissionlist',
@@ -14,7 +15,7 @@ export class PermissionlistComponent implements OnInit {
   @Input() user?: User;
   target_user_permissions: Permission[] = [ ];
 
-  constructor(private vs: VelocityService) { }
+  constructor(private vs: VelocityService, private ls: LoginService) { }
   
   ngOnInit(): void {
     this.update_user_info()
@@ -50,13 +51,20 @@ export class PermissionlistComponent implements OnInit {
     
     const is_checked: boolean = event.target.checked;
 
-    console.log(this.user?.uid!, this.group?.gid!, permission.name, is_checked)
-
     // Assign the permission.
     if (is_checked) {
       this.vs.add_permission(this.user?.uid!, this.group?.gid!, permission.name).subscribe({
         next: () => {
+          // Refresh user info
           this.update_user_info()
+
+          // Update the currently logged-in user
+          this.ls.set_user()
+          this.ls.user_set.subscribe({
+            next: () => {
+              this.vs.permissions_changed.emit()
+            }
+          })
          },
         error: (e) => { }
       })
@@ -66,6 +74,14 @@ export class PermissionlistComponent implements OnInit {
       this.vs.revoke_permission(this.user?.uid!, this.group?.gid!, permission.name).subscribe({
         next: () => {
           this.update_user_info()
+
+          // Update the currently logged-in user
+          this.ls.set_user()
+          this.ls.user_set.subscribe({
+            next: () => {
+              this.vs.permissions_changed.emit()
+            }
+          })
         },
         error: (e) => {
           console.error(e)

@@ -15,6 +15,9 @@ import { GroupsComponent } from './groups/groups.component';
 import { TreeNodeComponent } from './tree-node/tree-node.component';
 import { GroupassignComponent } from './groupassign/groupassign.component';
 import { PermissionlistComponent } from './permissionlist/permissionlist.component';
+import { MediaComponent } from './media/media.component';
+import { PoolpermissionsComponent } from './poolpermissions/poolpermissions.component';
+import { MediauploadComponent } from './mediaupload/mediaupload.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { PermissionlistComponent } from './permissionlist/permissionlist.compone
     GroupsComponent,
     TreeNodeComponent,
     GroupassignComponent,
-    PermissionlistComponent
+    PermissionlistComponent,
+    MediaComponent,
+    PoolpermissionsComponent,
+    MediauploadComponent
   ],
   imports: [
     BrowserModule,

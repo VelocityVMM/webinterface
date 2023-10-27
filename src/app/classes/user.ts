@@ -37,18 +37,18 @@ export class UserInfo {
 
     public has_permission_global(name: string): boolean {
         for(let membership of this.memberships) {
-        if(membership.has_permission(name)) {
-            return true;
-        }
+            if(membership.has_permission(name)) {
+                return true;
+            }
         }
         return false;
     }
 
     public has_permissions_global(names: string[]): boolean {
         for(let name of names) {
-        if(!this.has_permission_global(name)) {
-            return false;
-        }
+            if(!this.has_permission_global(name)) {
+                return false;
+            }
         }
         return true;
     }
@@ -69,9 +69,9 @@ export class Membership {
 
     public has_permission(name: string): boolean {
         for(let permission of this.permissions) {
-        if(permission.name == name) {
-            return true;
-        }
+            if(permission.name == name) {
+                return true;
+            }
         }
         return false;
     }

@@ -29,7 +29,6 @@ export class GroupsComponent implements OnInit {
   update() {
     this.vs.get_grouplist().subscribe({
       next: (v) => {
-        console.log(v)
         this.root_node = parse_flat_to_tree(v.groups)
       },
       error: (e) => {}

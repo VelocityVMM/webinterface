@@ -3,9 +3,10 @@ import { LoginService } from './login.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User, UserInfo, Users } from '../classes/user';
+import { Pool } from '../classes/media';
 
 
-const VELOCITY_URL = "http://localhost:8090/";
+export const VELOCITY_URL = "http://localhost:8090/";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ const VELOCITY_URL = "http://localhost:8090/";
 export class VelocityService {
 
   public group_tree_changed: EventEmitter<any> = new EventEmitter();
+  public permissions_changed: EventEmitter<any> = new EventEmitter();
 
   constructor(private http: HttpClient, private ls: LoginService) { }
 
@@ -259,6 +261,159 @@ export class VelocityService {
               {
                 authkey: authkey,
                 gid: gid
+              }
+            }
+          ).subscribe({
+            next: (v) => {
+              observer.next(v)
+              observer.complete()
+            }, error: (e) => {
+              observer.error(e)
+              observer.complete()
+            }
+          })
+        }
+      })
+    })
+  }
+
+  get_poollist(gid: number): Observable<any> {
+    return new Observable<any>((observer) => {
+
+      // async fetch and await Authkey
+      this.ls.get_authkey().subscribe({
+        next: (authkey) => {
+
+          // Use the acquired Authkey to send the actual request
+          this.http.request<any>('post', VELOCITY_URL + "m/pool/list", 
+            { body: 
+              {
+                authkey: authkey,
+                gid: gid
+              }
+            }
+          ).subscribe({
+            next: (v) => {
+              observer.next(v.pools)
+              observer.complete()
+            }, error: (e) => {
+              observer.error(e)
+              observer.complete()
+            }
+          })
+        }
+      })
+    })
+  }
+
+  assign_pool(gid: number, pool: Pool): Observable<any> {
+    return new Observable<any>((observer) => {
+
+      // async fetch and await Authkey
+      this.ls.get_authkey().subscribe({
+        next: (authkey) => {
+
+          // Use the acquired Authkey to send the actual request
+          this.http.request<any>('put', VELOCITY_URL + "m/pool/assign", 
+            { body: 
+              {
+                authkey: authkey,
+                gid: gid,
+                mpid: pool.mpid,
+                quota: 0, // Hardcoded '0' for now, does nothing on the backend anyway..
+                write: pool.write,
+                manage: pool.manage
+              }
+            }
+          ).subscribe({
+            next: (v) => {
+              observer.next(v)
+              observer.complete()
+            }, error: (e) => {
+              observer.error(e)
+              observer.complete()
+            }
+          })
+        }
+      })
+    })
+  }
+
+  revoke_pool(gid: number, mpid: number): Observable<any> {
+    return new Observable<any>((observer) => {
+
+      // async fetch and await Authkey
+      this.ls.get_authkey().subscribe({
+        next: (authkey) => {
+
+          // Use the acquired Authkey to send the actual request
+          this.http.request<any>('delete', VELOCITY_URL + "m/pool/assign", 
+            { body: 
+              {
+                authkey: authkey,
+                gid: gid,
+                mpid: mpid
+              }
+            }
+          ).subscribe({
+            next: (v) => {
+              observer.next(v)
+              observer.complete()
+            }, error: (e) => {
+              observer.error(e)
+              observer.complete()
+            }
+          })
+        }
+      })
+    })
+  }
+
+  get_medialist(gid: number): Observable<MediaList> {
+    return new Observable<MediaList>((observer) => {
+
+      // async fetch and await Authkey
+      this.ls.get_authkey().subscribe({
+        next: (authkey) => {
+
+          // Use the acquired Authkey to send the actual request
+          this.http.request<MediaList>('post', VELOCITY_URL + "m/media/list", 
+            { body: 
+              {
+                authkey: authkey,
+                gid: gid
+              }
+            }
+          ).subscribe({
+            next: (v) => {
+              observer.next(v)
+              observer.complete()
+            }, error: (e) => {
+              observer.error(e)
+              observer.complete()
+            }
+          })
+        }
+      })
+    })
+  }
+
+  create_media(mpid: number, gid: number, name: string, size: number): Observable<any> {
+    return new Observable<any>((observer) => {
+
+      // async fetch and await Authkey
+      this.ls.get_authkey().subscribe({
+        next: (authkey) => {
+
+          // Use the acquired Authkey to send the actual request
+          this.http.request('put', VELOCITY_URL + "m/media/create", 
+            { body: 
+              {
+                authkey: authkey,
+                mpid: mpid,
+                gid: gid,
+                name: name,
+                size: size
               }
             }
           ).subscribe({

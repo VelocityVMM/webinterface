@@ -7,6 +7,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { UsersComponent } from './users/users.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { GroupsComponent } from './groups/groups.component';
+import { MediaComponent } from './media/media.component';
 
 const routes: Routes = [
   { path: "", component: AppComponent, pathMatch: "full"},
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: "dashboard", component: DashboardComponent, children: [
     { path: "overview", component: OverviewComponent },
     { path: "users", component: UsersComponent },
-    { path: "groups", component: GroupsComponent }
+    { path: "groups", component: GroupsComponent },
+    { path: "media", component: MediaComponent }
   ] },
   {path: '**', component: NotfoundComponent },
 ];

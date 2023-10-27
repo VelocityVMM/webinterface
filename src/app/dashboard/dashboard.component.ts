@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LogService } from '../services/log.service';
 import { Flowbite } from '../flowbitefix/flowbitefix';
 import { NotificationService } from '../services/notification.service';
+import { VelocityService } from '../services/velocity.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,8 @@ export class DashboardComponent implements OnInit {
   @ViewChild('notificationRef', { read: ViewContainerRef, static: true }) vcr!: ViewContainerRef;
 
   constructor(private vlog: LogService, private ls: LoginService, 
-              private router: Router, private nf: NotificationService) { }
+              private router: Router, private nf: NotificationService,
+              private vs: VelocityService) { }
   
   ngOnInit(): void {
     this.nf.set_notification_template_ref(this.vcr)
@@ -40,6 +42,13 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(["/dashboard/overview"])
     }
     this.ls.user_set.subscribe({
+      next: () => {
+        this.permission_check()
+      }
+    })
+
+    // Update the dashboard if permissions change.
+    this.vs.permissions_changed.subscribe({
       next: () => {
         this.permission_check()
       }
@@ -83,6 +92,10 @@ export class DashboardComponent implements OnInit {
                                                   ])) {
       this.available_options.push("users");
     }
+
+    //TODO: TEMP
+    this.available_options.push("groups");
+    this.available_options.push("media");
   }
 
   is_enabled(name: string) {
