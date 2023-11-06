@@ -1,0 +1,62 @@
+<!-- MediaPool Modal -->
+<div id="mediapool-modal-{{group?.gid}}-{{pool?.mpid}}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between p-4 rounded-t dark:border-gray-600 bg-gray-100 dark:bg-gray-700">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Permissions on mediapool '{{pool?.name}}' for group '{{group?.name}}'
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" [attr.data-modal-hide]="'mediapool-modal-' + this.group?.gid + '-' + this.pool?.mpid">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+
+
+            <form #f="ngForm" (ngSubmit)="submit(f)" novalidate>
+                <!-- Modal body -->
+                <div class="flex items-center space-x-4 p-4 border-b dark:border-gray-600">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-md font-medium text-gray-900 truncate dark:text-white">
+                        Write
+                        </p>
+                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                        Allow this group to write on this Mediapool
+                        </p>
+                    </div>
+                    <div class="inline-flex items-center pr-4">
+                        <label class="relative inline-flex cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" name="write" [(ngModel)]="pool_settings.write">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 p-4 border-b dark:border-gray-600">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-md font-medium text-gray-900 truncate dark:text-white">
+                        Manage
+                        </p>
+                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                            Allow this group to manage this Mediapool
+                        </p>
+                    </div>
+                    <div class="inline-flex items-center pr-4">
+                        <label class="relative inline-flex cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" name="manage" [(ngModel)]="pool_settings.manage">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="p-6 text-center flex items-center justify-between"> 
+                    <button type="button" (click)="revoke()" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Revoke permissions</button>
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Apply permissions</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
