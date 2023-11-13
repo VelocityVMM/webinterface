@@ -1,0 +1,63 @@
+$border: #ddd;
+$border-hover: #aaa;
+$bg-hover: #eee;
+$text: #888;
+$text-hover: #000;
+$ident: 10px;
+$left: -($ident);
+
+
+ul {
+  margin-left:$ident;
+}
+
+  li {
+    list-style-type: none;
+    margin: 10px 0 10px 10px;
+    position: relative;
+
+    /*
+    &:before {
+      content: "";
+      position: absolute;
+      top: -11px;
+      left: $left;
+      //border: 3px solid yellow;
+
+      
+      border-left: 1px solid $border;
+      border-bottom:1px solid $border;
+      
+
+
+      width: $ident;
+      height: 36px;
+    }
+    */
+
+    
+
+    &:after {
+      position:absolute;
+      content:"";
+      top:0px;
+      left:$left;
+      //border-left: 1px solid yellow;
+      width:$ident;
+      height:100%;
+    }
+
+    
+
+    &:last-child:after {
+      display:none;
+    }
+
+    span {
+      display:block;
+      //border: 1px solid $border;
+      padding:10px;
+      //color:$text;
+      text-decoration:none;
+    }
+  }

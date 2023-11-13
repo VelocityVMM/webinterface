@@ -1,0 +1,25 @@
+
+<h4 class="inline-block mb-4 text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r to-fuchsia-600 from-orange-400">Groups</h4>
+
+
+<div class="dark:border-gray-700 dark:bg-gray-800 bg-white shadow-md rounded-lg pb-1">
+
+    <table class="w-full text-sm text-left text-gray-500 bg-gray-100 dark:text-gray-400 rounded-t-lg pb-2">
+        <thead>
+            <tr class="rounded-lg">
+                <th scope="col" class="px-6 py-3 rounded-lg">
+                    Group
+                </th>
+                <th scope="col" class="px-6 py-3 float-right rounded-lg">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+    <div class="pr-2">
+        <app-groupnode [group]="root_group" (tree_update)="fetch()"></app-groupnode>
+    </div>
+</div>
+
+

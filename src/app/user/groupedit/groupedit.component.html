@@ -1,0 +1,22 @@
+<app-modal *ngFor="let user of users" size="large" uid="permissions-user-{{user.uid}}" title="Manage permissions of user {{user.name}}">
+    <div class="flex h-96">
+        <div class="flex-auto w-32 pl-2 pr-2 pt-2 max-w-sm overflow-scroll overflow-y-auto">
+            <div *ngFor="let group of groups">
+                <!-- Not selected -->
+                <button *ngIf="group.gid != selected_group?.gid" (click)="set_group(group)" class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 w-full">
+                    ({{group.gid}}) {{group.name}}
+                </button>
+    
+                <!-- Selected -->
+                <button *ngIf="group.gid == selected_group?.gid" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full">({{group.gid}}) {{group.name}}</button>    
+            </div>
+        </div>
+    
+        <div class="flex-auto w-64 p-2 border-l dark:border-gray-600 overflow-scroll">
+            <div *ngFor="let group of groups">
+                <app-permissionassign *ngIf="selected_group?.gid == group.gid" [group]="group" [user]="user"></app-permissionassign>
+            </div>
+        </div>
+    </div>
+</app-modal>
+

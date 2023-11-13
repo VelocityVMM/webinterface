@@ -1,432 +1,195 @@
-import { EventEmitter, Injectable } from '@angular/core';
-import { LoginService } from './login.service';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { User, UserInfo, Users } from '../classes/user';
 import { Pool } from '../classes/media';
+import { AuthService } from '../auth/auth.service';
+import { User, UserInfo } from '../classes/user';
 
-
-export const VELOCITY_URL = "http://localhost:8090/";
+export const VELOCITY_URL = "http://192.168.1.188:8090/";
 
 @Injectable({
   providedIn: 'root'
 })
 export class VelocityService {
 
-  public group_tree_changed: EventEmitter<any> = new EventEmitter();
-  public permissions_changed: EventEmitter<any> = new EventEmitter();
+  constructor(private http: HttpClient, private as: AuthService) { }
 
-  constructor(private http: HttpClient, private ls: LoginService) { }
-
-  get_userlist(): Observable<User[]> {
-    const userlist_observable = new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-          
-          // Use the acquired Authkey to send the actual request
-          this.http.post<Users>(VELOCITY_URL + "u/user/list", { authkey: authkey }).subscribe({
-            next: (v) => {
-              observer.next(v.users)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
-    })
-    return userlist_observable;
+  /*
+   * Get list of users
+   */
+  async get_userlist(): Promise<any> {
+    return this.as.privileged_request('post', VELOCITY_URL + "u/user/list", { });
   }
 
-  create_user(username: string, password: string): Observable<any> {
-    const createuser_observable = new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.put<User>(VELOCITY_URL + "u/user/", 
-            {
-              name: username,
-              password: password, 
-              authkey: authkey
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
-    })
-    return createuser_observable
-  }
-
-  get_user_info(uid: number): Observable<UserInfo> { 
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request<UserInfo>('post', VELOCITY_URL + "u/user", 
-            { body: 
-              {
-                authkey: authkey,
-                uid: uid
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+   * Create a new User
+   */
+  async create_user(username: string, password: string): Promise<any> {
+    return this.as.privileged_request('put', VELOCITY_URL + "u/user", 
+    {
+      name: username,
+      password: password
     })
   }
 
-  add_permission(uid: number, gid: number, permission_identifier: string): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request('put', VELOCITY_URL + "u/user/permission", 
-            { body: 
-              {
-                authkey: authkey,
-                uid: uid,
-                gid: gid,
-                permission: permission_identifier
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+   * Get User Info
+   */
+  async get_user(uid?: number): Promise<any> {
+    return this.as.privileged_request('post', VELOCITY_URL + "u/user", 
+    {
+      uid: uid
     })
   }
 
-  revoke_permission(uid: number, gid: number, permission_identifier: string): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request('delete', VELOCITY_URL + "u/user/permission", 
-            { body: 
-              {
-                authkey: authkey,
-                uid: uid,
-                gid: gid,
-                permission: permission_identifier
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+   * Assign a permission
+   */
+  async add_permission(uid: number, gid: number, permission_identifier: string): Promise<any> {
+    return this.as.privileged_request('put', VELOCITY_URL + "u/user/permission", 
+    {
+      uid: uid,
+      gid: gid,
+      permission: permission_identifier
     })
   }
 
-  delete_user(uid: number): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request<User>('delete', VELOCITY_URL + "u/user/", 
-            { body: 
-              {
-                authkey: authkey,
-                uid: uid
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+   * Assign a permission
+   */
+  async revoke_permission(uid: number, gid: number, permission_identifier: string): Promise<any> {
+    return this.as.privileged_request('delete', VELOCITY_URL + "u/user/permission", 
+    {
+      uid: uid,
+      gid: gid,
+      permission: permission_identifier
     })
   }
 
-  get_grouplist(): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request('post', VELOCITY_URL + "u/group/list", 
-            { body: 
-              {
-                authkey: authkey,
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+  * Delete a user
+  */
+  async delete_user(uid: number): Promise<any> {
+    return this.as.privileged_request('delete', VELOCITY_URL + "u/user/", 
+    {
+      uid: uid,
     })
   }
 
-  add_subgroup(name: string, parent_gid: number): Observable<any> {
-    return new Observable<any>((observer) => {
+  /*
+  * Get grouplist
+  */
+  async get_grouplist(): Promise<any> {
+    return this.as.privileged_request('post', VELOCITY_URL + "u/group/list", { });
+  }
 
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request('put', VELOCITY_URL + "u/group", 
-            { body: 
-              {
-                authkey: authkey,
-                name: name,
-                parent_gid: parent_gid
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+  * Add a new subgroup
+  */  
+  async add_subgroup(name: string, parent_gid: number): Promise<any> {
+    return this.as.privileged_request('put', VELOCITY_URL + "u/group", {
+      name: name,
+      parent_gid: parent_gid
     })
   }
 
-  delete_group(gid: number): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request('delete', VELOCITY_URL + "u/group", 
-            { body: 
-              {
-                authkey: authkey,
-                gid: gid
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+  * Delete group
+  */
+  async delete_group(gid: number): Promise<any> {
+    return this.as.privileged_request('delete', VELOCITY_URL + "u/group", {
+      gid: gid
     })
   }
 
-  get_poollist(gid: number): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request<any>('post', VELOCITY_URL + "m/pool/list", 
-            { body: 
-              {
-                authkey: authkey,
-                gid: gid
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v.pools)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  /*
+  * Get poollist
+  */
+  async get_poollist(gid: number): Promise<any> {
+    return this.as.privileged_request('post', VELOCITY_URL + "m/pool/list", {
+      gid: gid
     })
   }
 
-  assign_pool(gid: number, pool: Pool): Observable<any> {
-    return new Observable<any>((observer) => {
+  /*
+  * This really should be redone api side..
+  */
+  async get_poollist_all(): Promise<any> {
+    let user: UserInfo;
+    
+    try {
+      user = await this.get_user();
+    } catch {
+      return [ ]
+    }
 
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
+    const pools: Pool[] = [ ];
 
-          // Use the acquired Authkey to send the actual request
-          this.http.request<any>('put', VELOCITY_URL + "m/pool/assign", 
-            { body: 
-              {
-                authkey: authkey,
-                gid: gid,
-                mpid: pool.mpid,
-                quota: 0, // Hardcoded '0' for now, does nothing on the backend anyway..
-                write: pool.write,
-                manage: pool.manage
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
+    // Check for every membership
+    for(let mb of user.memberships) {
+
+      // Iterate through every pool
+      for(let pool of (await this.get_poollist(mb.gid)).pools) {
+        let add = true;
+
+        // Check if we already have this pool
+        for(let p of pools) {
+          if(p.mpid == pool.mpid) {
+            add = false;
+          }
         }
-      })
+  
+        if(add) {
+          pools.push(pool)
+        }
+      }
+    }
+    return pools;
+  }
+
+  async assign_pool(gid: number, pool: Pool): Promise<any> {
+    return this.as.privileged_request('put', VELOCITY_URL + "m/pool/assign", {
+      gid: gid,
+      mpid: pool.mpid,
+      quota: 0, // Hardcoded '0' for now, does nothing on the backend anyway..
+      write: pool.write,
+      manage: pool.manage
     })
   }
 
-  revoke_pool(gid: number, mpid: number): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request<any>('delete', VELOCITY_URL + "m/pool/assign", 
-            { body: 
-              {
-                authkey: authkey,
-                gid: gid,
-                mpid: mpid
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  async revoke_pool(gid: number, mpid: number): Promise<any> {
+    return this.as.privileged_request('delete', VELOCITY_URL + "m/pool/assign", {
+      gid: gid,
+      mpid: mpid
     })
   }
 
-  get_medialist(gid: number): Observable<MediaList> {
-    return new Observable<MediaList>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request<MediaList>('post', VELOCITY_URL + "m/media/list", 
-            { body: 
-              {
-                authkey: authkey,
-                gid: gid
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  async get_medialist(gid: number): Promise<any> {
+    return this.as.privileged_request('post', VELOCITY_URL + "m/media/list", {
+      gid: gid,
     })
   }
 
-  create_media(mpid: number, gid: number, name: string, size: number): Observable<any> {
-    return new Observable<any>((observer) => {
-
-      // async fetch and await Authkey
-      this.ls.get_authkey().subscribe({
-        next: (authkey) => {
-
-          // Use the acquired Authkey to send the actual request
-          this.http.request('put', VELOCITY_URL + "m/media/create", 
-            { body: 
-              {
-                authkey: authkey,
-                mpid: mpid,
-                gid: gid,
-                name: name,
-                size: size
-              }
-            }
-          ).subscribe({
-            next: (v) => {
-              observer.next(v)
-              observer.complete()
-            }, error: (e) => {
-              observer.error(e)
-              observer.complete()
-            }
-          })
-        }
-      })
+  async create_media(mpid: number, gid: number, name: string, size: number): Promise<any> {
+    return this.as.privileged_request('put', VELOCITY_URL + "m/media/create", {
+      mpid: mpid,
+      gid: gid,
+      name: name,
+      size: size
     })
   }
+
+ /*
+  * Get the current users medialists
+  */
+  async get_user_medialists(): Promise<any> {
+    const medialists = new Map();
+    
+    const user = await this.get_user();
+    for(let membership of user.memberships) {
+      medialists.set(membership.gid, (await this.get_medialist(membership.gid)).media);
+    }
+
+    return medialists;
+  }
+
 }

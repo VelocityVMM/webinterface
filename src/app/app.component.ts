@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from './services/login.service';
 import { Router } from '@angular/router';
 import { initFlowbite } from 'flowbite';
-import { VelocityService } from './services/velocity.service';
 
 @Component({
   selector: 'app-root',
@@ -11,28 +9,15 @@ import { VelocityService } from './services/velocity.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private ls: LoginService, private router: Router) { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     // Try to restore an old Session
-    this.ls.restore_session()
+    // this.ls.restore_session()
 
     // Enable Flowbite JS
     initFlowbite();
-
-    if(!this.ls.logged_in()) {
-      this.router.navigate(["/login"])
-    } else {
-      // No target -> move to overview
-      if(window.location.pathname == "/") {
-        this.router.navigate(["/dashboard/overview"])
-      }
-    }
   }
 
-  login_check() {
-    return this.ls.logged_in()
-  }
-
-  title = 'webinterface';
+  title = 'hyper';
 }

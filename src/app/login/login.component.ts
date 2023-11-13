@@ -1,39 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../services/login.service';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   
-  showLogin: boolean = true;
-  showError: boolean = false;
+  show_login_dialogue: boolean = true;
+  show_error: boolean = false;
 
-  constructor(private ls: LoginService, private router: Router) { }
-  
-  ngOnInit(): void {
-    if(this.ls.logged_in()) {
-      this.router.navigate(["/dashboard"])
-    }
-  }
+  constructor(private as: AuthService, private router: Router) { }
 
   onSubmit(f: NgForm) {
-    this.showLogin = false;
-    this.showError = false;
+    this.show_error = false;
 
-    this.ls.login(f.value).subscribe({
-      next: (v) => {
+    this.as.login(f.value.username, f.value.password).then(success => {
+      if(success) {
+        this.show_login_dialogue = false;
+        this.show_error = false;
+
+        // Move to dashboard
         this.router.navigate(["/dashboard"])
-      },
-      error: (e) => {
-        this.showLogin = true;
-        this.showError = true;
-      },
-      complete: () => { }
+      } else {
+        this.show_error = true;
+      }
     })
   }
 }

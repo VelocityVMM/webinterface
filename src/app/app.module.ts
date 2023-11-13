@@ -8,16 +8,19 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from  '@angular/common/http';
 import { OverviewComponent } from './overview/overview.component';
-import { UsersComponent } from './users/users.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { NotificationComponent } from './notification/notification.component';
-import { GroupsComponent } from './groups/groups.component';
-import { TreeNodeComponent } from './tree-node/tree-node.component';
-import { GroupassignComponent } from './groupassign/groupassign.component';
-import { PermissionlistComponent } from './permissionlist/permissionlist.component';
-import { MediaComponent } from './media/media.component';
-import { PoolpermissionsComponent } from './poolpermissions/poolpermissions.component';
-import { MediauploadComponent } from './mediaupload/mediaupload.component';
+import { UserlistComponent } from './user/userlist/userlist.component';
+import { ModalComponent } from './vcomponents/modal/modal.component';
+import { ModalbuttonComponent } from './vcomponents/modalbutton/modalbutton.component';
+import { CreateuserComponent } from './user/createuser/createuser.component';
+import { GroupeditComponent } from './user/groupedit/groupedit.component';
+import { PermissionassignComponent } from './user/permissionassign/permissionassign.component';
+import { GroupviewComponent } from './group/groupview/groupview.component';
+import { GroupnodeComponent } from './group/groupnode/groupnode.component';
+import { PoolpermissionsComponent } from './group/poolpermissions/poolpermissions.component';
+import { MedialistComponent } from './media/medialist/medialist.component';
+import { MediauploadComponent } from './media/mediaupload/mediaupload.component';
 
 @NgModule({
   declarations: [
@@ -25,15 +28,18 @@ import { MediauploadComponent } from './mediaupload/mediaupload.component';
     LoginComponent,
     DashboardComponent,
     OverviewComponent,
-    UsersComponent,
     NotfoundComponent,
     NotificationComponent,
-    GroupsComponent,
-    TreeNodeComponent,
-    GroupassignComponent,
-    PermissionlistComponent,
-    MediaComponent,
+    UserlistComponent,
+    ModalComponent,
+    ModalbuttonComponent,
+    CreateuserComponent,
+    GroupeditComponent,
+    PermissionassignComponent,
+    GroupviewComponent,
+    GroupnodeComponent,
     PoolpermissionsComponent,
+    MedialistComponent,
     MediauploadComponent
   ],
   imports: [

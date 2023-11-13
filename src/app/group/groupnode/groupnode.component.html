@@ -1,0 +1,54 @@
+<!-- Create subgroup modal -->
+<app-modal [uid]="'create-subgroup-' + group?.gid" title="Create a new subgroup">
+    <form #f="ngForm" novalidate>
+        <div class="pt-6 px-3 space-y-6">
+            <div class="mb-6">
+                <label for="groupname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Groupname</label>
+                <input name="groupname" type="groupname" id="groupname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" ngModel required>
+            </div>
+        </div>
+
+        <!-- Create User button -->
+        <div class="p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <div class="grid place-items-end">
+                <button (click)="add_subgroup(f)" *ngIf="f.valid" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Group</button>
+                <button *ngIf="!f.valid" type="button" class="text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>Create Group</button>
+            </div>
+        </div>
+    </form>
+</app-modal>
+
+<!-- Permission managment modal -->
+<app-poolpermissions [group]="group" [uid]="'poolpermissions-' + group?.gid" [title]="'Edit mediapool permissions for Group \'' + group?.name + '\''"></app-poolpermissions>
+
+<!-- Tree Node -->
+<ul>
+    <li>
+        <span class="bg-white dark:bg-gray-800 border border-gray-200 rounded-lg">
+            {{group?.name}} ({{group?.gid}})
+        
+            <!-- Add subgroup -->
+            <button  type="button" class="dark:text-white text-gray-700 float-right mt-2" [attr.data-modal-target]="'create-subgroup-' + group?.gid" [attr.data-modal-toggle]="'create-subgroup-' + group?.gid">
+                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                </svg>
+            </button>
+
+            <!-- Delete group -->
+            <button type="button" class="pl-1 dark:text-white text-gray-700 float-right mt-2 mr-2" (click)="delete_group()">
+                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                </svg>
+            </button>
+
+            <button type="button" class="dark:text-white text-gray-700 float-right mt-1 mr-3 border-right" [attr.data-modal-target]="'poolpermissions-' + group?.gid" [attr.data-modal-toggle]="'poolpermissions-' + group?.gid">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                    <path stroke-width="2" d="M4.5 11a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 10.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                    <path stroke-width="2" d="M16 11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9.51c0-.418.105-.83.305-1.197l2.472-4.531A1.5 1.5 0 0 1 4.094 3h7.812a1.5 1.5 0 0 1 1.317.782l2.472 4.53c.2.368.305.78.305 1.198V11zM3.655 4.26 1.592 8.043C1.724 8.014 1.86 8 2 8h12c.14 0 .276.014.408.042L12.345 4.26a.5.5 0 0 0-.439-.26H4.094a.5.5 0 0 0-.44.26zM1 10v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
+                </svg>
+            </button>
+
+        </span>
+        <app-groupnode *ngFor="let g of group?.children" [group]="g" (tree_update)="kick_up()"></app-groupnode>
+    </li>
+</ul>
