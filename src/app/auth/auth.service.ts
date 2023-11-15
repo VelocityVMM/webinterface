@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { Mutex } from 'async-mutex';
 import { VELOCITY_URL } from '../services/velocity.service';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { VInfo, VWarn } from '../log/log';
 
 @Injectable({
@@ -41,6 +41,28 @@ export class AuthService {
     // Use the acquired Authkey to send the request
     request_payload["authkey"] = await this.authkey.get_key()
     return firstValueFrom(this.http.request(method, url, { body: request_payload }));
+  }
+
+  async privileged_fileupload_request(file_name: string, mpid: number, gid: number, type: string, readonly: boolean, file: any): Promise<Observable<any>> {
+    const formdata = new FormData();
+    formdata.append('file', file);
+
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/octet-stream')
+      .set('File-Name', file_name)
+      .set('x-velocity-authkey', (await this.authkey.get_key())!)
+      .set('x-velocity-mpid', "" + mpid)
+      .set('x-velocity-gid', "" + gid)
+      .set('x-velocity-name', file_name)
+      .set('x-velocity-type', type)
+      .set('x-velocity-readonly', readonly ? "true" : "false");
+
+    const req = this.http.request(new HttpRequest('put', VELOCITY_URL + 'm/media/upload', formdata, {
+      headers: headers,
+      reportProgress: true
+    }))
+
+    return req;
   }
 
   // canActivate function for router

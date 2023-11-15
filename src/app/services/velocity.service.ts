@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Pool } from '../classes/media';
 import { AuthService } from '../auth/auth.service';
 import { User, UserInfo } from '../classes/user';
+import { Observable } from 'rxjs';
 
 export const VELOCITY_URL = "http://192.168.1.188:8090/";
 
@@ -188,8 +189,10 @@ export class VelocityService {
     for(let membership of user.memberships) {
       medialists.set(membership.gid, (await this.get_medialist(membership.gid)).media);
     }
-
     return medialists;
   }
 
+  async upload_media(file_name: string, mpid: number, gid: number, type: string, readonly: boolean, file: any): Promise<Observable<any>> {
+    return this.as.privileged_fileupload_request(file_name, mpid, gid, type, readonly, file);
+  }
 }

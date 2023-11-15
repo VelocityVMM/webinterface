@@ -6,47 +6,49 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                 Media assigned to group {{medialist.key}}
+                
+                
+                <app-modalbutton class="float-right" bstyle="button" text="Upload Media" [uid]="'mediaupload-' + medialist.key" ></app-modalbutton>
+                <app-mediaupload [uid]="'mediaupload-' + medialist.key" [gid]="medialist.key"></app-mediaupload>
+
+
                 <p *ngIf="medialist.value.length == 0" class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">This group currently doesn't have any media assigned to it.</p>
             </caption>
 
-
-            <!-- Table head -->
-            <thead *ngIf="medialist.value.length != 0" class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        MID
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Media name
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Actions
-                    </th>
-                </tr>
-            </thead>
-            
-            
-            <tbody *ngIf="medialist.value.length != 0">
-                <tr>
-                    <td class="px-6 py-4">
-                       asfd
-                    </td>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                       asdf
-                    </th>
-                    <td class="px-6 py-4">
-                        <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
-                        <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
-                        <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
-
-                    </td>
-                </tr>
-            </tbody>
-
+            <!-- Table of media -->
+            <div *ngIf="medialist.value.length != 0">
+                <thead  class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            MID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Media name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr>
+                        <td class="px-6 py-4">
+                           asfd
+                        </td>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                           asdf
+                        </th>
+                        <td class="px-6 py-4">
+                            <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
+                            <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
+                            <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
+    
+                        </td>
+                    </tr>
+                </tbody>
+            </div>
 
         </table>
     </div>
-    
-
-
 </div>

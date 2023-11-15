@@ -1,1 +1,55 @@
-<p>mediaupload works!</p>
+<app-modal [uid]="uid" [title]="'Upload media for group ' + gid">
+    
+    <div class="m-4 pb-4">
+
+        <!-- STEP -1, Pick file -->
+        <div *ngIf="step == -1" class="flex items-center justify-center w-full">
+            <p class="text-red-500">This group does not have write permissions on any mediapool!</p>
+        
+        </div>
+
+
+
+        <!-- STEP 0, Pick file -->
+        <div *ngIf="step == 0" class="flex items-center justify-center w-full">
+            <label class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    </svg>
+                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">ISO Image (.iso), Disk Image (.img) or macOS restore Image (.ipsw)</p>
+                </div>
+                <input type="file" class="hidden" (change)="select_file($event)"/>
+            </label>
+        </div>
+
+        <!-- STEP 1, Select mpid, confirm -->
+        <div *ngIf="step == 1" class="w-full">
+            <p>Select where you want to save this disk image.</p>
+
+            <ul class="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white mt-4">
+                <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600" *ngFor="let pool of pools">
+                    <div class="flex items-center ml-2">
+                        <input [attr.id]="'mp-select-' + pool.mpid + '-' + gid" (click)="select_pool(pool)" type="radio" value="" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                        <label [attr.for]="'mp-select-' + pool.mpid + '-' + gid" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mediapool {{pool.name}} ({{pool.mpid}}) (90GB of 100GB free)</label>
+                    </div>
+                </li>
+            </ul>
+            <button [disabled]="pool == undefined" (click)="confirm_upload()" type="button" class="mt-4 text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                Confirm
+            </button>
+        </div>
+    
+        <!-- STEP 3, Upload progress -->
+        <div *ngIf="step == 2" class="w-full">
+            <div class="flex justify-between mb-1">
+                <span class="text-base font-medium text-blue-700 dark:text-white">Uploading..</span>
+                <span class="text-sm font-medium text-blue-700 dark:text-white">{{(progress * 100).toFixed()}}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-blue-600 h-2.5 rounded-full" [style.width]="(progress * 100).toFixed() + '%'"></div>
+            </div>
+        </div>
+    </div>    
+</app-modal>
