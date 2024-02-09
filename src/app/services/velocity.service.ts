@@ -147,6 +147,9 @@ export class VelocityService {
     return pools;
   }
 
+  /*
+  * Assign group permissions to mediapool
+  */
   async assign_pool(gid: number, pool: Pool): Promise<any> {
     return this.as.privileged_request('put', VELOCITY_URL + "m/pool/assign", {
       gid: gid,
@@ -157,6 +160,9 @@ export class VelocityService {
     })
   }
 
+  /*
+  * Revoke permissions from mediapool from group
+  */
   async revoke_pool(gid: number, mpid: number): Promise<any> {
     return this.as.privileged_request('delete', VELOCITY_URL + "m/pool/assign", {
       gid: gid,
@@ -164,18 +170,25 @@ export class VelocityService {
     })
   }
 
+  /*
+  * Fetch medialist for group
+  */
   async get_medialist(gid: number): Promise<any> {
     return this.as.privileged_request('post', VELOCITY_URL + "m/media/list", {
       gid: gid,
     })
   }
 
+  /*
+  * Create disk media
+  */
   async create_media(mpid: number, gid: number, name: string, size: number): Promise<any> {
     return this.as.privileged_request('put', VELOCITY_URL + "m/media/create", {
       mpid: mpid,
       gid: gid,
+      type: "DISK",
       name: name,
-      size: size
+      size: (size *  1e+6) // in bytes
     })
   }
 
@@ -192,7 +205,22 @@ export class VelocityService {
     return medialists;
   }
 
+  /*
+  * Upload media to server
+  */
   async upload_media(file_name: string, mpid: number, gid: number, type: string, readonly: boolean, file: any): Promise<Observable<any>> {
     return this.as.privileged_fileupload_request(file_name, mpid, gid, type, readonly, file);
   }
+
+  /*
+  * Delete media from server
+  */
+  async delete_media(mid: number) {
+    return this.as.privileged_request("delete", VELOCITY_URL + "m/media", {
+      mid: mid
+    });
+  }
+
+
+
 }

@@ -104,7 +104,7 @@ class AuthKey {
       this.mutex.release();
       this.refresh_interval = setInterval(() => {
         this.refresh();
-      }, 45000)
+      }, 30000)
 
       return true;
     } catch(error) {
@@ -209,7 +209,7 @@ class AuthKey {
     // Start the refresh interval 
     this.refresh_interval = setInterval(() => {
       this.refresh();
-    }, 45000)
+    }, 30000)
     
     return true;
   }

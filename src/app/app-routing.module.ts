@@ -8,15 +8,18 @@ import { canActivateFn } from './auth/auth.service';
 import { UserlistComponent } from './user/userlist/userlist.component';
 import { GroupviewComponent } from './group/groupview/groupview.component';
 import { MedialistComponent } from './media/medialist/medialist.component';
+import { VmlistComponent } from './vm/vmlist/vmlist.component';
 
 const routes: Routes = [
+  { path: "", pathMatch: "full", redirectTo: "/login"},
   { path: "login", component: LoginComponent },
   { path: "dashboard", component: DashboardComponent, canActivate: [canActivateFn], children: [
     { path: "", redirectTo: 'overview', pathMatch: 'full' },
     { path: "overview", component: OverviewComponent },
     { path: "users", component: UserlistComponent },
     { path: "groups", component: GroupviewComponent },
-    { path: "media", component: MedialistComponent }
+    { path: "media", component: MedialistComponent },
+    { path: "vm", component: VmlistComponent }
   ] },
   {path: '**', component: NotfoundComponent },
 ];

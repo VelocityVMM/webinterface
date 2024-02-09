@@ -97,11 +97,12 @@ export class DashboardComponent implements OnInit {
     */
 
     //TODO: TEMP
-    this.available_options.push("groups");
+    this.available_options.push("vm");
     this.available_options.push("media");
   }
 
   is_enabled(name: string) {
-    return this.available_options.includes(name)
+    return true;
+    //return this.available_options.includes(name)
   }
 }

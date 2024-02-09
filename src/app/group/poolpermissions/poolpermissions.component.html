@@ -1,6 +1,9 @@
 <app-modal [uid]="uid" [title]="title">
+    <div *ngIf="pools.length == 0" class="flex h-50 p-4 items-center justify-center w-full">
+        <p class="text-red-500">No mediapools available!</p>        
+    </div>
     
-    <div class="flex h-50">
+    <div *ngIf="pools.length != 0" class="flex h-50">
         <div class="flex-auto w-32 pl-2 pr-2 pt-2 max-w-sm overflow-scroll overflow-y-auto">
             
             <div *ngFor="let pool of pools" >

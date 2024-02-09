@@ -4,11 +4,8 @@
 
         <!-- STEP -1, Pick file -->
         <div *ngIf="step == -1" class="flex items-center justify-center w-full">
-            <p class="text-red-500">This group does not have write permissions on any mediapool!</p>
-        
+            <p class="text-red-500">This group does not have write permissions on any mediapool!</p>        
         </div>
-
-
 
         <!-- STEP 0, Pick file -->
         <div *ngIf="step == 0" class="flex items-center justify-center w-full">
@@ -26,22 +23,19 @@
 
         <!-- STEP 1, Select mpid, confirm -->
         <div *ngIf="step == 1" class="w-full">
-            <p>Select where you want to save this disk image.</p>
+            <p>Uploading file: {{file.name}}</p>
 
-            <ul class="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white mt-4">
-                <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600" *ngFor="let pool of pools">
-                    <div class="flex items-center ml-2">
-                        <input [attr.id]="'mp-select-' + pool.mpid + '-' + gid" (click)="select_pool(pool)" type="radio" value="" name="list-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                        <label [attr.for]="'mp-select-' + pool.mpid + '-' + gid" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mediapool {{pool.name}} ({{pool.mpid}}) (90GB of 100GB free)</label>
-                    </div>
-                </li>
-            </ul>
-            <button [disabled]="pool == undefined" (click)="confirm_upload()" type="button" class="mt-4 text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select where you want to save this disk image.</label>
+            <select (change)="set_mediapool($event.target)" class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                <option value="{{pool.mpid}}" *ngFor="let pool of pools">{{pool.name}}</option>
+            </select>
+
+            <button (click)="confirm_upload()" type="button" class="pb-4 mt-4 text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                 Confirm
             </button>
         </div>
     
-        <!-- STEP 3, Upload progress -->
+        <!-- STEP 2, Upload progress -->
         <div *ngIf="step == 2" class="w-full">
             <div class="flex justify-between mb-1">
                 <span class="text-base font-medium text-blue-700 dark:text-white">Uploading..</span>

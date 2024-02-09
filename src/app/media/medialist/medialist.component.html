@@ -1,54 +1,57 @@
 <h4 class="inline-block mb-4 text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r to-fuchsia-600 from-orange-400">Media</h4>
 
 <div *ngFor="let medialist of medialists | keyvalue">
+    
+    <div class="overflow-x-auto shadow-md sm:rounded-lg mb-4">
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg my-4">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                Media assigned to group {{medialist.key}}
-                
-                
-                <app-modalbutton class="float-right" bstyle="button" text="Upload Media" [uid]="'mediaupload-' + medialist.key" ></app-modalbutton>
+            
+            <!-- Title -->
+            <caption class="pt-4 pr-4 pl-4 pb-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                Media assigned to group '{{lookup_group_name(medialist.key)}}' ({{medialist.key}})
+                                
+                <app-modalbutton class="float-right" bstyle="button" text="Upload Media" [uid]="'mediaupload-' + medialist.key"></app-modalbutton>
                 <app-mediaupload [uid]="'mediaupload-' + medialist.key" [gid]="medialist.key"></app-mediaupload>
+                <app-modalbutton class="pr-2 float-right" bstyle="button" text="Create Media" [uid]="'mediacreate-' + medialist.key"></app-modalbutton>
+                <app-mediacreate [uid]="'mediacreate-' + medialist.key" [gid]="medialist.key"></app-mediacreate> 
 
-
-                <p *ngIf="medialist.value.length == 0" class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">This group currently doesn't have any media assigned to it.</p>
+                <p *ngIf="medialist.value.length == 0" class="pt-2 mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">This group currently doesn't have any media assigned to it.</p>
             </caption>
 
             <!-- Table of media -->
-            <div *ngIf="medialist.value.length != 0">
-                <thead  class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            MID
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Media name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    <tr>
-                        <td class="px-6 py-4">
-                           asfd
-                        </td>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                           asdf
-                        </th>
-                        <td class="px-6 py-4">
-                            <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
-                            <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
-                            <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>&nbsp;
-    
-                        </td>
-                    </tr>
-                </tbody>
-            </div>
-
+            <thead *ngIf="medialist.value.length != 0" class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        MID
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Media type
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Media name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr class="bg-white dark:bg-gray-800" *ngFor="let media of medialist.value">
+                    <td class="px-6 py-4">
+                        {{media.mid}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{media.type}}
+                    </td>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{media.name}}
+                    </th>
+                    <td class="px-6 py-4">
+                        <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline" (click)="delete_media(media.mid)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>

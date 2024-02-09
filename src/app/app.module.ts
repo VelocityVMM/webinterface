@@ -21,6 +21,10 @@ import { GroupnodeComponent } from './group/groupnode/groupnode.component';
 import { PoolpermissionsComponent } from './group/poolpermissions/poolpermissions.component';
 import { MedialistComponent } from './media/medialist/medialist.component';
 import { MediauploadComponent } from './media/mediaupload/mediaupload.component';
+import { CreatevmComponent } from './vm/createvm/createvm.component';
+import { VmlistComponent } from './vm/vmlist/vmlist.component';
+import { AttachmediaComponent } from './vm/attachmedia/attachmedia.component';
+import { MediacreateComponent } from './media/mediacreate/mediacreate.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +44,11 @@ import { MediauploadComponent } from './media/mediaupload/mediaupload.component'
     GroupnodeComponent,
     PoolpermissionsComponent,
     MedialistComponent,
-    MediauploadComponent
+    MediauploadComponent,
+    CreatevmComponent,
+    VmlistComponent,
+    AttachmediaComponent,
+    MediacreateComponent
   ],
   imports: [
     BrowserModule,
