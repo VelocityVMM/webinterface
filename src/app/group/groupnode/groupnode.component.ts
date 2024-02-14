@@ -29,6 +29,8 @@ export class GroupnodeComponent {
     ).catch(err => {
       this.nf.send_notification(NotificationType.ERROR, "Could not create group.");
     })
+
+    form.reset()
   }
 
   delete_group() {
