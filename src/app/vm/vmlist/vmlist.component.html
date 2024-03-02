@@ -1,3 +1,54 @@
 <h4 class="inline-block mb-4 text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r to-fuchsia-600 from-orange-400">Virtual Machines</h4>
 <app-modalbutton bstyle="button" uid="create-vm" class="mr-2 mb-2 float-right" text="Create VM"></app-modalbutton>
 <app-createvm></app-createvm>
+
+<div *ngFor="let group of vms | keyvalue">
+
+    <div class="rounded-lg pb-3" *ngIf="group.value.length != 0">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3"></th>
+                    <th scope="col" class="px-6 py-3">
+                        VMID
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        vCPUs
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Memory
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vm of group.value" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td></td>
+                    <td class="px-6 py-4">
+                        {{vm.vmid}}
+                    </td>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{vm.name}}
+                    </th>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{vm.cpus}}
+                    </th>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{vm.memory_mib}}
+                    </th>
+                    <td class="px-6 py-4">
+                        <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Remove</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<button (click)="test()"> Test VM Launch </button>

@@ -1,80 +1,348 @@
 <app-modal uid="create-vm" title="Create a new VirtualMachine">
-    <form class="p-4 pb-0" #f="ngForm">
 
-        <!-- STEP 0 (name and type) -->
-        <div *ngIf="step == 0" class="mb-5">
+    <!-- STEP 0 -->
+    <form *ngIf="step == 0" class="p-4 pb-0 mb-4" #step0="ngForm">
+        <!-- VirtualMachine name -->
+        <div class="pb-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">VirtualMachine name</label>
+            <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" ngModel name="vmname" required>    
+        </div>
 
-            <!-- VirtualMachine name -->
-            <div class="pb-2">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">VirtualMachine name</label>
-                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>    
-            </div>
+        <!-- Group that owns this VM -->
+        <div class="pb-4">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group</label>
+            
+            <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" ngModel name="gid" required>
+                <option value="" selected disabled>Select Group</option>
+                <option *ngFor="let mb of memberships" [attr.value]="mb.gid">{{mb.name}} ({{mb.gid}})</option>
+            </select>
+        </div>
 
-            <div class="pb-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group</label>
-                
-                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                    <option selected="">Select Group</option>
-                    <option value="TV">TV/Monitors</option>
-                    <option value="PC">PC</option>
-                    <option value="GA">Gaming/Console</option>
-                    <option value="PH">Phones</option>
-                </select>
-            </div>
+        <!-- VirtualMachine type -->
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">VirtualMachine type</label>
+        <div class="border rounded-lg border-gray-300 p-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-500 mb-4">
 
-            <!-- VirtualMachine type -->
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">VirtualMachine type</label>
-            <div class="border rounded-lg border-gray-300 p-2 bg-gray-50">
-
-                <div class="flex pb-2">
-                    <div class="flex items-center h-5">
-                        <input id="helper-radio" aria-describedby="helper-radio-text" type="radio" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    </div>
-                    <div class="ms-2 text-sm">
-                        <label for="helper-radio" class="font-medium text-gray-900 dark:text-gray-300">Virtual mac</label>
-                        <p id="helper-radio-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">The virtual mac type allows you to run arm64 macOS.</p>
-                    </div>
+            <div class="flex pb-2">
+                <div class="flex items-center h-8">
+                    <input type="radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" name="vmtype" value="mac" ngModel required>
                 </div>
-    
-                <div class="flex">
-                    <div class="flex items-center h-5">
-                        <input id="helper-radio" aria-describedby="helper-radio-text" type="radio" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    </div>
-                    <div class="ms-2 text-sm">
-                        <label for="helper-radio" class="font-medium text-gray-900 dark:text-gray-300">EFI VM</label>
-                        <p id="helper-radio-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">The EFI type allows you to run arm64 Linux, BSD and others.</p>
-                    </div>
+                <div class="ms-2 text-sm">
+                    <label  class="font-medium text-gray-900 dark:text-gray-300">Virtual mac</label>
+                    <p class="text-xs font-normal text-gray-500 dark:text-gray-300">The virtual mac type allows you to run arm64 macOS.</p>
+                </div>
+            </div>
+
+            <div class="flex">
+                <div class="flex items-center h-8">
+                    <input type="radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" name="vmtype" value="efi" ngModel required>
+                </div>
+                <div class="ms-2 text-sm">
+                    <label class="font-medium text-gray-900 dark:text-gray-300">EFI VM</label>
+                    <p class="text-xs font-normal text-gray-500 dark:text-gray-300">The EFI type allows you to run arm64 Linux, BSD and others.</p>
                 </div>
             </div>
         </div>
 
+        <!-- Control buttons for this step -->
+        <div class="items-center p-2 border-t border-gray-200 rounded-b dark:border-gray-600 grid place-items-end">
+            <button *ngIf="step0.valid" (click)="submit(step0)"type="button" class="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>  
+            <button *ngIf="!step0.valid" type="button" class="text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>Next</button>
+        </div>
+    </form>
+
+
+    <div *ngIf="step == 1" class="p-4 pb-0 mb-4">
         <!-- STEP 1 (CPU, memory) -->
-        <div *ngIf="step == 1" class="mb-5">
+        <div class="mb-5">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount of CPU cores</label>
-            <div class="mb-6 border rounded-lg border-gray-300 p-2 bg-gray-50">
+            <div class="mb-6 border rounded-lg border-gray-300 p-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-500">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{cpu_slider}} vCPUs</label>
-                <input type="range" min="1" max="8" value="0" step="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-blue cursor-pointer dark:bg-gray-700" [(ngModel)]="cpu_slider" [ngModelOptions]="{standalone: true}">
+                <input type="range" min="1" max="8" value="0" step="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-blue cursor-pointer dark:bg-gray-500" [(ngModel)]="cpu_slider" [ngModelOptions]="{standalone: true}">
             </div>
 
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount of Memory</label>
-            <div class="mb-6 border rounded-lg border-gray-300 p-2 bg-gray-50">
+            <div class="mb-6 border rounded-lg border-gray-300 p-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-500">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{mem_slider}} MB</label>
-                <input type="range" min="1024" max="8192" value="0" step="64" class="w-full h-2 bg-gray-200 rounded-lg appearance-blue cursor-pointer dark:bg-gray-700" [(ngModel)]="mem_slider" [ngModelOptions]="{standalone: true}">    
+                <input type="range" min="128" max="8192" value="0" step="64" class="w-full h-2 bg-gray-200 rounded-lg appearance-blue cursor-pointer dark:bg-gray-500" [(ngModel)]="mem_slider" [ngModelOptions]="{standalone: true}">    
             </div>
         </div>
 
-        <!-- Disk managment -->
-        <div *ngIf="step == 2">
-            
-        </div>
-
-
-    </form>
-    <!-- Modal footer -->
-    <div class="flex items-center p-2 border-t border-gray-200 rounded-b dark:border-gray-600 grid place-items-end">
-        <div>
-            <button *ngIf="step != 0" (click)="previous()" type="button" class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Back</button>  
-            <button (click)="next()" type="button" class="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>  
+        <div class="items-center p-2 border-t border-gray-200 rounded-b dark:border-gray-600 grid place-items-end">
+            <div>
+                <button (click)="submit(undefined)" type="button" class="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>  
+            </div>
         </div>
     </div>
+
+    <div *ngIf="step == 2" class="p-4 pb-0 mb-4">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Add a new Display</label>
+
+        <form class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-500 p-2 mb-4 rounded-lg" #create_disp="ngForm">
+
+            <div class="grid gap-6 mb-2 md:grid-cols-2">
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Identifier:</label>
+                    <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Display 1" ngModel name="name" required />
+                </div>
+    
+                <div>
+                    <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pixels per inch:</label>
+                    <input (keypress)="validate_num($event)" type="number" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="192" ngModel name="ppi" required/>
+                </div>
+    
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Screen width:</label>
+                    <input (keypress)="validate_num($event)" type="number" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1920" ngModel name="width" required/>
+                </div>
+    
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Screen height:</label>
+                    <input (keypress)="validate_num($event)" type="number" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1080" ngModel name="height" required/>
+                </div>
+
+
+            </div>
+
+            <div class="grid place-items-end">
+                <button *ngIf="!create_disp.valid" (click)="add_display(create_disp)" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-not-allowed" disabled>Create Display</button>
+                <button *ngIf="create_disp.valid" (click)="add_display(create_disp)" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Create Display</button>
+            </div>
+        </form>
+
+        <div class="pt-4 pb-4" *ngIf="displays.length == 0">
+            <p class="text-lg text-gray-900 dark:text-white">You need to create at least one display to continue.</p>
+        </div>
+
+        <label *ngIf="displays.length != 0" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Displays assigned to this Virtual Machine</label>
+        <div *ngIf="displays.length != 0" class="relative overflow-x-auto shadow-md my-4 rounded-lg border border-gray-300 dark:border-gray-500">
+
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Identifier
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Size
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            PPI
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let display of displays" class="bg-white dark:bg-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{display.name}}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{display.width}}x{{display.height}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{display.ppi}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <!-- Control buttons for this step -->
+        <div class="items-center p-2 border-t border-gray-200 rounded-b dark:border-gray-600 grid place-items-end">
+            <button *ngIf="displays.length != 0" (click)="submit(undefined)"type="button" class="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>  
+            <button *ngIf="displays.length == 0" type="button" class="text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>Next</button>
+        </div>
+    </div>
+
+
+    <div *ngIf="step == 3" class="p-4 pb-0 mb-4">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose how to attach virtual disks to the new Virtual Machine. Attach an ISO Image using "USB", choose "BLOCK" or "VIRTIO" for Hard disk images.</label>
+        
+        <p class="text-lg text-gray-900 dark:text-white pt-4" *ngIf="media.length == 0">This group doesn't own any media.</p>
+
+        <div *ngIf="media.length != 0" class="relative overflow-x-auto shadow-md my-4 rounded-lg border border-gray-300 dark:border-gray-500">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Virtual Disk Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Type
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Attach using
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let m of media"class="bg-white dark:bg-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{m.name}}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{m.type}}
+                        </td>
+
+                        <!-- Not already attached in some way -->
+                        <td *ngIf="m.enabled" class="px-6 py-4">
+                            <a (click)="attach_vdisk('USB', m)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">USB</a>&nbsp;
+                            <a (click)="attach_vdisk('BLOCK', m)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">BLOCK</a>&nbsp;
+                            <a (click)="attach_vdisk('VIRTIO', m)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">VIRTIO</a>&nbsp;
+                        </td>
+
+                        <!-- Already attached in some way -->
+                        <td *ngIf="!m.enabled" class="px-6 py-4">
+                            <a class="font-medium text-gray-600 dark:text-gray-500 hover:underline" disabled>USB</a>&nbsp;
+                            <a class="font-medium text-gray-600 dark:text-gray-500 hover:underline" disabled>BLOCK</a>&nbsp;
+                            <a class="font-medium text-gray-600 dark:text-gray-500 hover:underline" disabled>VIRTIO</a>&nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <label *ngIf="vm_info.disks.length != 0" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">List of attached disks</label>
+        <div *ngIf="vm_info.disks.length != 0" class="relative overflow-x-auto shadow-md my-4 rounded-lg border border-gray-300 dark:border-gray-500">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Virtual Disk Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Attached using
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let m of vm_info.disks"class="bg-white dark:bg-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{m.name}}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{m.mode}}
+                        </td>
+                        <td class="px-6 py-4">
+                            <a (click)="remove_vdisk(m)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detatch</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Control buttons for this step -->
+        <div class="items-center p-2 border-t border-gray-200 rounded-b dark:border-gray-600 grid place-items-end">
+            <button (click)="submit(undefined)"type="button" class="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>  
+        </div>
+    </div>
+
+    <div *ngIf="step == 4" class="p-4 pb-0 mb-4">
+        <p>TODO: NIC Managment, when it's implemented server side..</p>
+
+        <!-- Control buttons for this step -->
+        <div class="items-center p-2 border-t border-gray-200 rounded-b dark:border-gray-600 grid place-items-end">
+            <button (click)="submit(undefined)"type="button" class="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Next</button>  
+        </div>
+    </div>
+
+    <div *ngIf="step == 5" class="p-4 pb-0 mb-4">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clicking "Create" will create a Virtual Machine with the following specifications: </label>
+        
+        <div class="rounded-lg bg-gray-50 dark:bg-gray-700 pb-2">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <tbody>
+                    <tr>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Name
+                        </th>
+                        <td class="px-6 py-4">
+                            {{vm_info.name}}
+                        </td>
+                    </tr>
+    
+                    <tr >
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Type
+                        </th>
+                        <td class="px-6 py-4">
+                            {{vm_info.type}}
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            vCPUs
+                        </th>
+                        <td class="px-6 py-4">
+                            {{vm_info.cpus}} core(s)
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Memory
+                        </th>
+                        <td class="px-6 py-4">
+                            {{vm_info.memory_mib}} mb
+                        </td>
+                    </tr>
+    
+                    <tr >
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Displays
+                        </th>
+                        <td class="px-6 py-4">
+                            {{displays_string()}}
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Media
+                        </th>
+                        <td class="px-6 py-4">
+                            {{media_string()}}
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            NICs
+                        </th>
+                        <td class="px-6 py-4">
+                            N/A
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Rosetta
+                        </th>
+                        <td class="px-6 py-4">
+                            Enabled
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Start on boot
+                        </th>
+                        <td class="px-6 py-4">
+                            Disabled
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Control buttons for this step -->
+        <div class="items-center p-2 border-t border-gray-200 rounded-b dark:border-gray-600 grid place-items-end">
+            <button (click)="create()" type="button" class="ml-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>  
+        </div>
+    </div>
+
 </app-modal>

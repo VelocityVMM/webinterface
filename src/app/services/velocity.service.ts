@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Pool } from '../classes/media';
 import { AuthService } from '../auth/auth.service';
-import { User, UserInfo } from '../classes/user';
+import { UserInfo } from '../classes/user';
 import { Observable } from 'rxjs';
 
 export const VELOCITY_URL = "http://192.168.1.188:8090/";
@@ -12,7 +12,7 @@ export const VELOCITY_URL = "http://192.168.1.188:8090/";
 })
 export class VelocityService {
 
-  constructor(private http: HttpClient, private as: AuthService) { }
+  constructor(private as: AuthService) { }
 
   /*
    * Get list of users
@@ -35,7 +35,7 @@ export class VelocityService {
   /*
    * Get User Info
    */
-  async get_user(uid?: number): Promise<any> {
+  async get_user(uid?: number): Promise<UserInfo> {
     return this.as.privileged_request('post', VELOCITY_URL + "u/user", 
     {
       uid: uid
@@ -200,6 +200,7 @@ export class VelocityService {
     
     const user = await this.get_user();
     for(let membership of user.memberships) {
+      // TOOD: Check if we have the required permissions
       medialists.set(membership.gid, (await this.get_medialist(membership.gid)).media);
     }
     return medialists;
@@ -221,6 +222,48 @@ export class VelocityService {
     });
   }
 
+  /*
+  * Get all VMLists of user
+  */
+ async get_vmlists() {
+  const vmlists = new Map();
+    
+  const user = await this.get_user();
+  for(let membership of user.memberships) {
+    // TOOD: Check if we have the required permissions
+    vmlists.set(membership.gid, (await this.get_vmlist(membership.gid)).vms);
+  }
+  return vmlists;
+ }
 
+  /*
+  * Fetch vmlist for group
+  */
+  async get_vmlist(gid: number): Promise<any> {
+    return this.as.privileged_request('post', VELOCITY_URL + "v/vm/list", {
+      gid: gid,
+    })
+  }
+  
+  /*
+  * Create a new Virtual Machine
+  */
+  async create_vm(vm: any): Promise<any> {
+    if(vm.type == "efi") {
+      return this.as.privileged_request('put', VELOCITY_URL + "v/vm/efi", vm)
+    } else {
+      // TODO: Add MAC..
+    }
+  }
 
+  /*
+  * Start a given Virtual Machine
+  */
+ async change_vmstate(vmid: number, state: string, force: boolean) {
+  return this.as.privileged_request('post', VELOCITY_URL + "v/vm/state", {
+    vmid: vmid,
+    state: state,
+    force: force
+  })
+ }
 }

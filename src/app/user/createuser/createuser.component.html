@@ -19,7 +19,7 @@
         <!-- Create User button -->
         <div class="p-6 space-x-2 rounded-b dark:border-gray-600">
             <div class="grid place-items-end">
-                <button *ngIf="f.valid" data-modal-hide="user_modal" (click)="create_user(f)" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create User</button>
+                <button *ngIf="f.valid" (click)="create_user(f)" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create User</button>
                 <button *ngIf="!f.valid" type="button" class="text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>Create User</button>
             </div>
         </div>

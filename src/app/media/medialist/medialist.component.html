@@ -2,18 +2,20 @@
 
 <div *ngFor="let medialist of medialists | keyvalue">
     
-    <div class="overflow-x-auto shadow-md sm:rounded-lg mb-4">
+    <div class="overflow-x-scroll shadow-md rounded-lg mb-4">
 
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <table class="w-full relative text-sm text-left text-gray-500 dark:text-gray-400">
             
             <!-- Title -->
-            <caption class="pt-4 pr-4 pl-4 pb-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+            <caption class="pt-4 relative pr-4 pl-4 pb-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                 Media assigned to group '{{lookup_group_name(medialist.key)}}' ({{medialist.key}})
-                                
-                <app-modalbutton class="float-right" bstyle="button" text="Upload Media" [uid]="'mediaupload-' + medialist.key"></app-modalbutton>
-                <app-mediaupload [uid]="'mediaupload-' + medialist.key" [gid]="medialist.key"></app-mediaupload>
-                <app-modalbutton class="pr-2 float-right" bstyle="button" text="Create Media" [uid]="'mediacreate-' + medialist.key"></app-modalbutton>
-                <app-mediacreate [uid]="'mediacreate-' + medialist.key" [gid]="medialist.key"></app-mediacreate> 
+
+                <div class="flex-shrink-0 flex space-x-2 float-right">
+                    <app-modalbutton bstyle="button" text="Upload Media" [uid]="'mediaupload-' + medialist.key"></app-modalbutton>
+                    <app-mediaupload [uid]="'mediaupload-' + medialist.key" [gid]="medialist.key"></app-mediaupload>
+                    <app-modalbutton bstyle="button" text="Create Media" [uid]="'mediacreate-' + medialist.key"></app-modalbutton>
+                    <app-mediacreate [uid]="'mediacreate-' + medialist.key" [gid]="medialist.key"></app-mediacreate> 
+                </div>
 
                 <p *ngIf="medialist.value.length == 0" class="pt-2 mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">This group currently doesn't have any media assigned to it.</p>
             </caption>
